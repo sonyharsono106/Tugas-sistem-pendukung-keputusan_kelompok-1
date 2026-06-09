@@ -527,9 +527,6 @@ Original file is located at
 # **Rule Base:** 9 aturan fuzzy (matriks 3x3 Biaya x Lowongan Pekerjaan)
 # **Output Centroid:** Rendah=20, Sedang=50, Tinggi=80
 #         """)
-
-!streamlit run app.py > streamlit.log 2>&1 &
-
 import urllib.request
 print("IP Tunnel:", urllib.request.urlopen('https://ipv4.icanhazip.com').read().decode('utf8').strip('\n'))
 
