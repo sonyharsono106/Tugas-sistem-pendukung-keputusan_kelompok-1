@@ -159,8 +159,8 @@ st.sidebar.divider()
 # ── Mode selector ──────────────────────────────
 mode = st.sidebar.radio(
     "Mode Input",
-    ["🔢 Angka (Data Penelitian)", "🗣️ Linguistik (Tanpa Angka)"],
-    help="Pilih 'Linguistik' jika tidak tahu angkanya — cukup pilih Rendah/Sedang/Tinggi"
+    ["🤖 Otomatis (Data Penelitian)", "✏️ Input Manual"],
+    help="'Otomatis' pakai data hasil riset JobStreet. 'Input Manual' untuk memasukkan data sendiri."
 )
 st.sidebar.divider()
 
@@ -168,22 +168,17 @@ pelatihan_list             = ["SAP", "Lean Six Sigma", "AutoCAD"]
 default_biaya              = [4_000_000, 6_500_000, 1_200_000]
 default_lowongan_pekerjaan = [956, 857, 1409]
 
-# Nilai representatif untuk mode linguistik
-# Biaya  → Rendah ≈ 1.5jt (pusat zona rendah), Sedang ≈ 4jt (puncak segitiga), Tinggi ≈ 7jt (zona tinggi)
-# Lowongan → Rendah ≈ 700, Sedang ≈ 1100 (puncak), Tinggi ≈ 1500
-LINGUISTIK_BIAYA     = {"Rendah (< Rp2 jt)": 1_000_000,
-                        "Sedang (Rp2–6,5 jt)": 4_000_000,
-                        "Tinggi (> Rp6,5 jt)": 8_000_000}
-LINGUISTIK_LOWONGAN  = {"Sedikit (< 857)":       650,
-                        "Sedang (857–1.409)":    1_100,
-                        "Banyak (> 1.409)":      1_600}
-
 inputs = {}
 
 for i, nama in enumerate(pelatihan_list):
     st.sidebar.subheader(f"📌 {nama}")
 
-    if mode == "🔢 Angka (Data Penelitian)":
+    if mode == "🤖 Otomatis (Data Penelitian)":
+        b = default_biaya[i]
+        l = default_lowongan_pekerjaan[i]
+        st.sidebar.caption(f"Biaya: Rp {b:,}")
+        st.sidebar.caption(f"Lowongan Pekerjaan: {l}")
+    else:
         b = st.sidebar.number_input(
             f"Biaya {nama} (Rp)",
             min_value=0, max_value=20_000_000,
@@ -196,40 +191,19 @@ for i, nama in enumerate(pelatihan_list):
             value=default_lowongan_pekerjaan[i], step=10,
             key=f"low_{nama}"
         )
-    else:
-        # Tentukan default label berdasarkan nilai default
-        def_b_label = list(LINGUISTIK_BIAYA.keys())[
-            0 if default_biaya[i] < 2_000_000 else
-            2 if default_biaya[i] > 6_500_000 else 1
-        ]
-        def_l_label = list(LINGUISTIK_LOWONGAN.keys())[
-            0 if default_lowongan_pekerjaan[i] < 857 else
-            2 if default_lowongan_pekerjaan[i] > 1_409 else 1
-        ]
-        b_label = st.sidebar.selectbox(
-            f"Biaya {nama}",
-            list(LINGUISTIK_BIAYA.keys()),
-            index=list(LINGUISTIK_BIAYA.keys()).index(def_b_label),
-            key=f"biaya_ling_{nama}"
-        )
-        l_label = st.sidebar.selectbox(
-            f"Lowongan Pekerjaan {nama}",
-            list(LINGUISTIK_LOWONGAN.keys()),
-            index=list(LINGUISTIK_LOWONGAN.keys()).index(def_l_label),
-            key=f"low_ling_{nama}"
-        )
-        b = LINGUISTIK_BIAYA[b_label]
-        l = LINGUISTIK_LOWONGAN[l_label]
-        st.sidebar.caption(f"Biaya → Rp {b:,} | Lowongan → {l}")
 
     inputs[nama] = {"biaya": b, "lowongan_pekerjaan": l}
     st.sidebar.divider()
 
-if mode == "🗣️ Linguistik (Tanpa Angka)":
+if mode == "🤖 Otomatis (Data Penelitian)":
     st.sidebar.info(
-        "**Mode Linguistik**\n\n"
-        "Pilihan dropdown otomatis dikonversi ke nilai representatif "
-        "di tengah setiap himpunan fuzzy."
+        "Data bersumber dari riset **JobStreet** dan wawancara dosen. "
+        "Langsung klik Hitung Prioritas."
+    )
+else:
+    st.sidebar.warning(
+        "Pastikan data yang dimasukkan berasal dari sumber yang valid "
+        "(JobStreet, wawancara, dll) agar hasil dapat dipertanggungjawabkan."
     )
 
 st.sidebar.button("🔍 Hitung Prioritas", use_container_width=True, type="primary")
