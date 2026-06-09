@@ -216,27 +216,7 @@ with tab1:
     with col2:
         st.pyplot(plot_lowongan_pekerjaan())
 
-    st.divider()
-    st.subheader("ℹ️ Keterangan Fungsi Keanggotaan")
-    col_a, col_b = st.columns(2)
-    with col_a:
-        st.markdown("""
-**Variabel Biaya:**
-| Himpunan | Jenis Fungsi | Parameter |
-|----------|-------------|-----------|
-| Rendah | Trapesium Kiri | plateau s.d. Rp2.000.000, turun ke Rp4.000.000 |
-| Sedang | Segitiga | naik dari Rp2jt, puncak Rp4jt, turun ke Rp6,5jt |
-| Tinggi | Trapesium Kanan | naik dari Rp4.000.000 ke Rp6.500.000+ |
-""")
-    with col_b:
-        st.markdown("""
-**Variabel Lowongan Pekerjaan:**
-| Himpunan | Jenis Fungsi | Parameter |
-|----------|-------------|-----------|
-| Rendah | Trapesium Kiri | plateau s.d. 857, turun ke 1.100 |
-| Sedang | Segitiga | naik dari 857, puncak 1.100, turun ke 1.409 |
-| Tinggi | Trapesium Kanan | naik dari 1.100 ke 1.409+ |
-""")
+
 
 
 # ─────────────────────────────────────────────
